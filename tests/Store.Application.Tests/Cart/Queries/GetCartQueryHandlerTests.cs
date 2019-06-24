@@ -38,16 +38,5 @@ namespace Store.Application.Tests.Cart.Queries
             result.Total.ShouldBe(351.0m);
         }
 
-        [Fact]
-
-        public async Task GetFail()
-        {
-            var sut = new GetCartQueryHandler(_context, _mapper);
-
-            Exception ex = await Assert.ThrowsAsync<NotFoundException>(() => sut.Handle(new GetCartQuery { UserId = "Alex" }, CancellationToken.None));
-
-            ex.Message.ShouldBe("Entity \"Cart\" (Alex) was not found.");
-        }
-
     }
 }

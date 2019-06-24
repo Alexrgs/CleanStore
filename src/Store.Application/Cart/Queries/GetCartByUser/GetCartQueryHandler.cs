@@ -32,7 +32,10 @@ namespace Store.Application.Cart.Queries.GetCartByUser
 
             if (cart == null)
             {
-                throw new NotFoundException(nameof(Cart), request.UserId);
+                _context.Carts.Add(new Domain.Entities.Cart() {  UserId = request.UserId });
+                 var result =  await _context.SaveChangesAsync(cancellationToken);
+
+                cart = await _context.Carts.SingleOrDefaultAsync(w=> w.CartId == result);
             }
 
             return new CartViewModel() { Items = _mapper.Map<IEnumerable<CartItemModel>>(cart.Items) };

@@ -1,12 +1,13 @@
-import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.css'
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import { createLogger } from 'redux-logger'
 import thunk from 'redux-thunk'
-import  cartReducer  from './reducers/CartReducer'
+import reducers from './reducers'
+import { getAllProducts } from './actions/ProductsActions'
 import App from './App';
 //import registerServiceWorker from './registerServiceWorker';
 
@@ -19,10 +20,11 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const store = createStore(
-    cartReducer,
+    reducers,
     applyMiddleware(...middleware)
 )
 
+store.dispatch(getAllProducts());
 
 ReactDOM.render(
     <BrowserRouter basename={baseUrl}>

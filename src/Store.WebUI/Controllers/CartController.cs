@@ -20,7 +20,7 @@ namespace Store.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<CartViewModel>> Get()
         {
-            return Ok(await Mediator.Send(new GetCartQuery() {  UserId = User.Identity.Name}));
+            return Ok(await Mediator.Send(new GetCartQuery() {  UserId = UserId }));
         }
 
         [Authorize]
@@ -30,7 +30,7 @@ namespace Store.WebUI.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Add(int productId)
         {
-            await Mediator.Send(new AddProductCommand() {  ProcuctId = productId });
+            await Mediator.Send(new AddProductCommand() { UserId = UserId,  ProcuctId = productId });
 
             return NoContent();
         }
@@ -42,7 +42,7 @@ namespace Store.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> AdjustQuantity(int productId , short quantity)
         {            
-            await Mediator.Send( new AdjustQuantityCommand() { UserId = User.Identity.Name , ProcuctId = productId , Quantity = quantity } );
+            await Mediator.Send( new AdjustQuantityCommand() { UserId = UserId, ProcuctId = productId , Quantity = quantity } );
 
             return NoContent();
         }
@@ -54,7 +54,7 @@ namespace Store.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Remove(int productId)
         {
-            await Mediator.Send(new RemoveProductCommand { UserId = User.Identity.Name , ProcuctId = productId });
+            await Mediator.Send(new RemoveProductCommand { UserId = UserId, ProcuctId = productId });
 
             return NoContent();
         }

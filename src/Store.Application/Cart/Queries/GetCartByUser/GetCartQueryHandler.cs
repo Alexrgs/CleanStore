@@ -25,20 +25,29 @@ namespace Store.Application.Cart.Queries.GetCartByUser
 
         public async Task<CartViewModel> Handle(GetCartQuery request, CancellationToken cancellationToken)
         {
-            var cart = await _context
-                .Carts.Include(i => i.Items).Where(p => p.UserId == request.UserId)
-                .SingleOrDefaultAsync(cancellationToken);
-            
+
+            // TODO: investigate why works on test and not in the real thing
+            //var cart = await _context
+            //    .Carts.Where(p => p.UserId == request.UserId)
+            //    .Include(i => i.Items)
+            //    .ThenInclude(cartItem => cartItem.Product) //  Works on tests on sqlite but not on MSSQL 
+            //    .FirstOrDefaultAsync(cancellationToken);
+
+            //Workaround use CartItems
+            var cart = await _context.Carts.SingleOrDefaultAsync(w => w.UserId == request.UserId, cancellationToken);
+            var cartItems = await _context.CartItems
+                .Where(p => p.Cart.UserId == request.UserId)
+                .Include(i => i.Product)
+                .ToListAsync(cancellationToken);
 
             if (cart == null)
             {
                 _context.Carts.Add(new Domain.Entities.Cart() {  UserId = request.UserId });
                  var result =  await _context.SaveChangesAsync(cancellationToken);
-
-                cart = await _context.Carts.SingleOrDefaultAsync(w=> w.CartId == result);
+                cartItems = await _context.CartItems.Where(w => w.Cart.CartId == result).ToListAsync(cancellationToken);
             }
 
-            return new CartViewModel() { Items = _mapper.Map<IEnumerable<CartItemModel>>(cart.Items) };
+            return new CartViewModel() { Items = _mapper.Map<IEnumerable<CartItemModel>>(cartItems) };
         }
     }
 

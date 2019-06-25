@@ -38,9 +38,3 @@ export function loadCart(cart) {
         payload: { cart }
     }
 }
-
-export const getUserCart = () => dispatch => {
-    new CartClient().get().then(p => {
-        dispatch(loadCart(p.items));
-    });
-}

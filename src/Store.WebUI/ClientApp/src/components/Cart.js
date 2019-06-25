@@ -1,17 +1,16 @@
 ﻿import React from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import { deleteFromCart, updateItemQuantity, checkOut } from '../actions/CartActions';
+import { deleteFromCart, updateItemQuantity, checkOut, loadCart } from '../actions/CartActions';
 import { Col, Row, Panel, Badge, Button } from 'react-bootstrap';
 import CartItem from "./CartItem";
 import { CartClient } from '../api/ApiClients';
 
 class Cart extends React.Component {
-    
     componentDidMount() {
         new CartClient().get().then(p => {
-            this.setState({ cart: p.items });
-        });
+            this.props.loadCart(p.items);
+       });
     }
     renderCart() {
         return (
@@ -98,7 +97,8 @@ function mapStateToProps(state) {
 function mapActionsToProps(dispatch) {
     return bindActionCreators({
         deleteFromCart,
-        updateItemQuantity
+        updateItemQuantity,
+        loadCart,
     }, dispatch);
 }
 

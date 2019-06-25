@@ -14,11 +14,11 @@ export default function cartReducer(state = [], action = {}) {
 
         case UPDATE_ITEM_QUANTITY:
             let existingItemIndex = findProductIndex(state, action.payload.productId);
-            new CartClient().adjustQuantity(action.payload.productId, action.payload.quantity);
             if (state[existingItemIndex].quantity === 0 && action.payload.quantity === -1) {
                 break;
             }
             state[existingItemIndex].quantity += action.payload.quantity;
+            new CartClient().adjustQuantity(action.payload.productId, state[existingItemIndex].quantity);
             return state.concat([]);
 
         case DELETE_FROM_CART:
@@ -26,6 +26,7 @@ export default function cartReducer(state = [], action = {}) {
             new CartClient().remove(action.payload.productId);
             return [...state.slice(0, indexToDel), ...state.slice(indexToDel + 1)];
         case LOAD_CART:
+            let temp = '';
             return action.payload.cart;
     }
 

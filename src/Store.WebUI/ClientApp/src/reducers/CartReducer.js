@@ -1,5 +1,5 @@
-﻿import { ADD_TO_CART, DELETE_FROM_CART, UPDATE_ITEM_QUANTITY, LOAD_CART } from '../actions/CartActions';
-import { CartClient } from '../api/ApiClients';
+﻿import { ADD_TO_CART, DELETE_FROM_CART, UPDATE_ITEM_QUANTITY, LOAD_CART, CHECKOUT } from '../actions/CartActions';
+import { CartClient, OrdersClient } from '../api/ApiClients';
 
 export default function cartReducer(state = [], action = {}) {
     switch (action.type) {
@@ -14,7 +14,7 @@ export default function cartReducer(state = [], action = {}) {
 
         case UPDATE_ITEM_QUANTITY:
             let existingItemIndex = findProductIndex(state, action.payload.productId);
-            if (state[existingItemIndex].quantity === 0 && action.payload.quantity === -1) {
+            if (state[existingItemIndex].quantity === 1 && action.payload.quantity === -1) {
                 break;
             }
             state[existingItemIndex].quantity += action.payload.quantity;
@@ -26,8 +26,10 @@ export default function cartReducer(state = [], action = {}) {
             new CartClient().remove(action.payload.productId);
             return [...state.slice(0, indexToDel), ...state.slice(indexToDel + 1)];
         case LOAD_CART:
-            let temp = '';
             return action.payload.cart;
+        case CHECKOUT:
+            new OrdersClient().submit();
+            return state;
     }
 
     function findProductIndex(products, productId) {

@@ -28,7 +28,7 @@ namespace Store.Application.Orders.Commands.SubmitOrder
 
             public async Task<Unit> Handle(SubmitOrderCommand request, CancellationToken cancellationToken)
             {
-                var UserCart = await _context.Carts.SingleOrDefaultAsync(w => w.UserId == request.UserId, cancellationToken);
+                var UserCart = await _context.Carts.Include(i=> i.Items).SingleOrDefaultAsync(w => w.UserId == request.UserId, cancellationToken);
 
                 //Verify if user have a cart
                 if (UserCart == null)
@@ -43,6 +43,12 @@ namespace Store.Application.Orders.Commands.SubmitOrder
                 }
 
                 //TODO: Add submit order logic here 
+
+                //clean user cart 
+                UserCart.Items = new List<CartItem>();
+
+                _context.Carts.Update(UserCart);
+               await _context.SaveChangesAsync(cancellationToken);
 
                 return Unit.Value;
             }

@@ -1,6 +1,4 @@
-﻿import { CartClient } from '../api/ApiClients';
-
-export const ADD_TO_CART = 'ADD_TO_CART';
+﻿export const ADD_TO_CART = 'ADD_TO_CART';
 export const DELETE_FROM_CART = 'DELETE_FROM_CART';
 export const UPDATE_ITEM_QUANTITY = 'UPDATE_ITEM_QUANTITY';
 export const LOAD_CART = 'LOAD_CART';
@@ -25,7 +23,7 @@ export function updateItemQuantity({ productId, quantity }) {
     }
 }
 
-export function checkOut({  }) {
+export function checkOut() {
     return {
         type: CHECKOUT,
         payload: { }

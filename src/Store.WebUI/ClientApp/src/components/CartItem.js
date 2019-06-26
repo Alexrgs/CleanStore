@@ -15,7 +15,7 @@ class CartItem extends React.Component {
                             <Label bsStyle='success'> {this.props.cartItem.quantity} </Label>
                             &nbsp;
                             <Button bsSize='small' onClick={() => this.props.onAddUnit()}>+</Button>
-                            <Button bsSize='small' onClick={() => this.props.onDeductUnit()}>-</Button>
+                            <Button bsSize='small' onClick={() => this.props.onDeductUnit()} >-</Button>
                         </p>
                     </Col>
                     <Col xs={6} sm={2}>

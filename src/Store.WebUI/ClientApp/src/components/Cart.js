@@ -12,18 +12,9 @@ class Cart extends React.Component {
             this.props.loadCart(p.items);
        });
     }
-    renderCart() {
-        return (
-            <Panel className='cartList' header='' bsStyle='primary'>
-                {this.cartList()}
-                <Row>
-                    <Col xs={12} sm={6}>
-                        <Button onClick={() => this.props.handleCheckOut()}
-                            bsSize='small' bsStyle='danger'>Checkout</Button>
-                    </Col>
-                </Row>
-            </Panel>
-        );
+
+    handleCheckOut() {
+        this.props.checkOut()
     }
     handleDeleteFromCart(productId) {
         this.props.deleteFromCart({ productId })
@@ -36,10 +27,23 @@ class Cart extends React.Component {
         let quantity = 1;
         this.props.updateItemQuantity({ productId, quantity })
     }
-    handleCheckOut() {
-        this.props.checkOut()
-    }
 
+
+
+    renderCart() {
+        return (
+            <Panel className='cartList' header='' bsStyle='primary'>
+                {this.cartList()}
+                <Row>
+                    <Col xs={12} sm={6}>
+                        <Button onClick={this.handleCheckOut.bind(this)}
+                            bsSize='small' bsStyle='danger'>Checkout</Button>
+                    </Col>
+                </Row>
+            </Panel>
+        );
+    }
+   
 
     cartList() {
         return (
@@ -98,6 +102,7 @@ function mapActionsToProps(dispatch) {
     return bindActionCreators({
         deleteFromCart,
         updateItemQuantity,
+        checkOut,
         loadCart,
     }, dispatch);
 }

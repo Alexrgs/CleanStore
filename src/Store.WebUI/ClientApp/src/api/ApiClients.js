@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var ApiClientBase_1 = require("./ApiClientBase");
 /* tslint:disable */
 /* eslint-disable */
 //----------------------
@@ -21,7 +22,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // </auto-generated>
 //----------------------
 // ReSharper disable InconsistentNaming
-var ApiClientBase_1 = require("./ApiClientBase");
 var CartClient = /** @class */ (function (_super) {
     __extends(CartClient, _super);
     function CartClient(baseUrl, http) {
@@ -288,6 +288,62 @@ var OidcConfigurationClient = /** @class */ (function (_super) {
     return OidcConfigurationClient;
 }(ApiClientBase_1.ApiClientBase));
 exports.OidcConfigurationClient = OidcConfigurationClient;
+var OrdersClient = /** @class */ (function (_super) {
+    __extends(OrdersClient, _super);
+    function OrdersClient(baseUrl, http) {
+        var _this = _super.call(this) || this;
+        _this.jsonParseReviver = undefined;
+        _this.http = http ? http : window;
+        _this.baseUrl = baseUrl ? baseUrl : "https://localhost:5001";
+        return _this;
+    }
+    OrdersClient.prototype.submit = function () {
+        var _this = this;
+        var url_ = this.baseUrl + "/api/Orders/Submit";
+        url_ = url_.replace(/[?&]$/, "");
+        var options_ = {
+            method: "POST",
+            headers: {}
+        };
+        return this.transformOptions(options_).then(function (transformedOptions_) {
+            return _this.http.fetch(url_, transformedOptions_);
+        }).then(function (_response) {
+            return _this.processSubmit(_response);
+        });
+    };
+    OrdersClient.prototype.processSubmit = function (response) {
+        var _this = this;
+        var status = response.status;
+        var _headers = {};
+        if (response.headers && response.headers.forEach) {
+            response.headers.forEach(function (v, k) { return _headers[k] = v; });
+        }
+        ;
+        if (status === 204) {
+            return response.text().then(function (_responseText) {
+                return;
+            });
+        }
+        else if (status === 401) {
+            return response.text().then(function (_responseText) {
+                var result401 = null;
+                var resultData401 = _responseText === "" ? null : JSON.parse(_responseText, _this.jsonParseReviver);
+                result401 = ProblemDetails.fromJS(resultData401);
+                return throwException("A server error occurred.", status, _responseText, _headers, result401);
+            });
+        }
+        else {
+            return response.text().then(function (_responseText) {
+                var resultdefault = null;
+                var resultDatadefault = _responseText === "" ? null : JSON.parse(_responseText, _this.jsonParseReviver);
+                resultdefault = ProblemDetails.fromJS(resultDatadefault);
+                return throwException("A server error occurred.", status, _responseText, _headers, resultdefault);
+            });
+        }
+    };
+    return OrdersClient;
+}(ApiClientBase_1.ApiClientBase));
+exports.OrdersClient = OrdersClient;
 var ProductsClient = /** @class */ (function (_super) {
     __extends(ProductsClient, _super);
     function ProductsClient(baseUrl, http) {

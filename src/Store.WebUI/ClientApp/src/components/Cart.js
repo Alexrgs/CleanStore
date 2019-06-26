@@ -7,15 +7,17 @@ import CartItem from "./CartItem";
 import { CartClient } from '../api/ApiClients';
 
 class Cart extends React.Component {
+
     componentDidMount() {
-        new CartClient().get().then(p => {
-            this.props.loadCart(p.items);
-       });
+        this.updateCart();
     }
 
-    handleCheckOut() {
-        this.props.checkOut()
+    updateCart() {
+        new CartClient().get().then(p => {
+            this.props.loadCart(p.items)
+        })
     }
+    
     handleDeleteFromCart(productId) {
         this.props.deleteFromCart({ productId })
     }
@@ -27,8 +29,11 @@ class Cart extends React.Component {
         let quantity = 1;
         this.props.updateItemQuantity({ productId, quantity })
     }
-
-
+    handleCheckOut() {
+        this.props.checkOut()
+        this.updateCart()
+    }
+    
 
     renderCart() {
         return (

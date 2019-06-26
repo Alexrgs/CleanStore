@@ -40,7 +40,7 @@ namespace Store.Application.Cart.Commands.AddProduct
                     throw new NotFoundException(nameof(Product), request.ProcuctId);
                 }
 
-                var UserCart = await _context.Carts.SingleOrDefaultAsync(w => w.UserId == request.UserId, cancellationToken);
+                var UserCart = await _context.Carts.Include(i=> i.Items).SingleOrDefaultAsync(w => w.UserId == request.UserId, cancellationToken);
                 
                 //Verify if user have a cart
                 if (UserCart == null)

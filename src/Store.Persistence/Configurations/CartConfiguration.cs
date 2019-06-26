@@ -13,7 +13,7 @@ namespace Store.Persistence.Configurations
         {
             builder.HasKey(e => e.CartId);
 
-            builder.HasMany(e => e.Items);
+            builder.HasMany(e => e.Items).WithOne(s=> s.Cart);
 
         }
     }

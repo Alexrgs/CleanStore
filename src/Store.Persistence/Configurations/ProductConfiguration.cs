@@ -27,8 +27,9 @@ namespace Store.Persistence.Configurations
                 .HasColumnType("money")
                 .HasDefaultValueSql("((0))");
 
-            builder.Property(e => e.UnitsInStock).HasDefaultValueSql("((0))");            
+            builder.Property(e => e.UnitsInStock).HasDefaultValueSql("((0))");
 
+            builder.HasMany(e => e.CartItems);
         }
     }
 }
